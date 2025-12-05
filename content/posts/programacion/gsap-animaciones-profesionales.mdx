@@ -1,0 +1,76 @@
+---
+title: "GSAP: Animaciones Web Profesionales"
+date: "2024-10-28"
+excerpt: "Aprende a crear animaciones fluidas y profesionales con GSAP, la biblioteca de animación más poderosa para la web."
+tags: ["GSAP", "Animaciones", "JavaScript", "Frontend"]
+image: "/images/gsap-blog.jpg"
+---
+
+# GSAP: Animaciones Web Profesionales
+
+GSAP (GreenSock Animation Platform) es la biblioteca de animación más robusta y utilizada en la industria. En este artículo, veremos por qué es tan popular y cómo comenzar a usarla.
+
+## ¿Por qué GSAP?
+
+GSAP ofrece ventajas significativas sobre CSS animations y otras bibliotecas:
+
+- **Rendimiento superior**: Optimizado para 60 FPS
+- **Control total**: Secuencias de animación complejas
+- **Compatibilidad**: Funciona en todos los navegadores
+- **Plugins poderosos**: ScrollTrigger, Draggable, y más
+
+## Instalación
+
+```bash
+npm install gsap
+```
+
+## Ejemplo básico
+
+```javascript
+import { gsap } from 'gsap';
+
+gsap.to('.box', {
+  x: 100,
+  duration: 1,
+  ease: 'power2.out'
+});
+```
+
+## ScrollTrigger: Animaciones al hacer scroll
+
+ScrollTrigger es uno de los plugins más populares de GSAP:
+
+```javascript
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.to('.element', {
+  scrollTrigger: {
+    trigger: '.element',
+    start: 'top center',
+    end: 'bottom center',
+    scrub: true
+  },
+  opacity: 1,
+  y: 0
+});
+```
+
+## Timeline para secuencias complejas
+
+```javascript
+const tl = gsap.timeline();
+
+tl.to('.box1', { x: 100 })
+  .to('.box2', { y: 100 })
+  .to('.box3', { rotation: 360 });
+```
+
+## Conclusión
+
+GSAP es una herramienta esencial para cualquier desarrollador front-end que quiera crear experiencias web memorables. Su curva de aprendizaje es suave y los resultados son impresionantes.
+
+¡Empieza a experimentar con GSAP hoy mismo!

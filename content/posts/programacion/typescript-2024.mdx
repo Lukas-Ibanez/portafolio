@@ -1,0 +1,94 @@
+---
+title: "TypeScript: Por qué deberías usarlo en 2024"
+date: "2024-09-20"
+excerpt: "TypeScript se ha convertido en el estándar de facto para desarrollo JavaScript. Descubre por qué y cómo empezar."
+tags: ["TypeScript", "JavaScript", "Programming"]
+image: "/images/typescript-blog.jpg"
+---
+
+# TypeScript: Por qué deberías usarlo en 2024
+
+Si aún no estás usando TypeScript en tus proyectos, este artículo te convencerá de por qué deberías hacerlo.
+
+## ¿Qué es TypeScript?
+
+TypeScript es un superset de JavaScript que añade tipos estáticos opcionales. Esto significa:
+
+- Detección de errores en tiempo de desarrollo
+- Mejor autocompletado en el IDE
+- Código más mantenible y documentado
+- Refactorización más segura
+
+## Ventajas principales
+
+### 1. Detección temprana de errores
+
+```typescript
+function sumar(a: number, b: number): number {
+  return a + b;
+}
+
+sumar(5, "10"); // ❌ Error: Argument of type 'string' is not assignable to parameter of type 'number'
+```
+
+### 2. Intellisense mejorado
+
+El autocompletado funciona perfectamente cuando defines tipos:
+
+```typescript
+interface Usuario {
+  nombre: string;
+  edad: number;
+  email: string;
+}
+
+const usuario: Usuario = {
+  nombre: "Lukas",
+  edad: 25,
+  email: "lukas@example.com"
+};
+
+usuario. // ¡El IDE te mostrará todas las propiedades disponibles!
+```
+
+### 3. Interfaces y Tipos
+
+```typescript
+type ID = string | number;
+
+interface Proyecto {
+  id: ID;
+  titulo: string;
+  descripcion: string;
+  tecnologias: string[];
+  completado: boolean;
+}
+```
+
+## Empezando con TypeScript
+
+### Instalación
+
+```bash
+npm install -D typescript @types/node
+npx tsc --init
+```
+
+### Configuración básica (tsconfig.json)
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true
+  }
+}
+```
+
+## Conclusión
+
+TypeScript mejora significativamente la experiencia de desarrollo y la calidad del código. La curva de aprendizaje inicial vale totalmente la pena.
+
+¿Ya usas TypeScript? ¡Cuéntame tu experiencia!
