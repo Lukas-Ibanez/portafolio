@@ -3,6 +3,15 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
+const publicDir = path.join(process.cwd(), 'public');
+
+function resolvePublicImage(filePath?: string) {
+  if (!filePath || typeof filePath !== 'string') return undefined;
+  // Normalize '/images/foo.webp' to path under public
+  const rel = filePath.replace(/^\//, '');
+  const full = path.join(publicDir, rel);
+  return fs.existsSync(full) ? filePath : undefined;
+}
 
 export interface Post {
   slug: string;
@@ -56,8 +65,8 @@ export function getPostBySlug(slug: string, category?: 'programacion' | 'otros')
       category: category,
       tags: data.tags || [],
       readTime: data.readTime || calculateReadTime(content),
-      image: data.image,
-      coverImage: data.coverImage || undefined,
+      image: resolvePublicImage(data.image) || undefined,
+      coverImage: resolvePublicImage(data.coverImage) || undefined,
       content,
       sources: data.sources || [],
     };
@@ -80,8 +89,8 @@ export function getPostBySlug(slug: string, category?: 'programacion' | 'otros')
         category: cat,
         tags: data.tags || [],
         readTime: data.readTime || calculateReadTime(content),
-        image: data.image,
-        coverImage: data.coverImage || undefined,
+        image: resolvePublicImage(data.image) || undefined,
+        coverImage: resolvePublicImage(data.coverImage) || undefined,
         content,
         sources: data.sources || [],
       };

@@ -242,7 +242,7 @@ export default function Hero() {
   }, [mousePosition]);
 
   const name = 'LUKAS IBÁÑEZ';
-  const subtitle = ['DESARROLLADOR', 'FULL-STACK', '&', 'CREADOR', 'DIGITAL'];
+  const subtitle = ['DESARROLLADOR', 'FULL-STACK'];
   const techStack = ['React', 'Next.js', 'TypeScript', 'Node.js', 'GSAP', 'Tailwind', 'PostgreSQL', 'MongoDB'];
 
   return (

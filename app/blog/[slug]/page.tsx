@@ -96,7 +96,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           {/* Cover image (usa la ruta en frontmatter: 'coverImage' o, si no existe, 'image'). Si no hay ninguna, no renderiza la sección */}
           { (post.coverImage || post.image) ? (
             <div className="mt-6">
-              <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden">
+              <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden mb-4">
                 <CoverImage src={post.coverImage || post.image} alt={post.title} fill className="object-cover w-full h-full rounded-lg" />
               </div>
             </div>
