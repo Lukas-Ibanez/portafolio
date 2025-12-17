@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GSAPProvider from "@/components/GSAPProvider";
+import GlobalBackground from "@/components/GlobalBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,15 +38,20 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black relative min-h-screen overflow-x-hidden`}
       >
-        <GSAPProvider>
-          <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
-        </GSAPProvider>
+        {/* Fondo global con canvas, grid, gradientes y orbitales */}
+        <GlobalBackground />
+
+        <div className="relative z-10">
+          <GSAPProvider>
+            <Header />
+            <main className="min-h-screen">
+              {children}
+            </main>
+            <Footer />
+          </GSAPProvider>
+        </div>
       </body>
     </html>
   );

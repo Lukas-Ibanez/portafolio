@@ -12,13 +12,14 @@ export default function NavigationCards() {
       const cards = sectionRef.current?.querySelectorAll('.nav-card');
       
       if (cards) {
-        gsap.from(cards, {
+        gsap.set(cards, { opacity: 0, y: 80 });
+        gsap.to(cards, {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 70%',
           },
-          y: 80,
-          opacity: 0,
+          y: 0,
+          opacity: 1,
           duration: 1,
           stagger: 0.3,
           ease: 'power3.out',
@@ -30,8 +31,23 @@ export default function NavigationCards() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 bg-black">
-      <div className="container mx-auto px-4">
+    <section ref={sectionRef} className="relative py-20">
+      {/* Grid de fondo animado */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+        }}></div>
+      </div>
+
+      {/* Gradientes luminosos de fondo */}
+      <div className="absolute inset-0">
+        <div className="parallax-slow absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div className="parallax-medium absolute top-1/2 right-0 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px]"></div>
+        <div className="parallax-fast absolute bottom-0 left-1/3 w-[450px] h-[450px] bg-cyan-600/20 rounded-full blur-[100px]"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Card de Proyectos */}
           <Link

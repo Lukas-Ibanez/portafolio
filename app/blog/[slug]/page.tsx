@@ -5,6 +5,7 @@ import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import 'highlight.js/styles/github-dark.css';
+import CoverImage from '@/components/CoverImage';
 
 export async function generateStaticParams() {
   const programacionPosts = getAllPosts('programacion');
@@ -16,8 +17,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -31,15 +33,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug);
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black pt-32 pb-20">
+    <div className="min-h-screen pt-32 pb-20">
       <article className="container mx-auto px-4 max-w-4xl">
         {/* Back button */}
         <Link
@@ -90,6 +93,15 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
             <span>{post.readTime}</span>
           </div>
 
+          {/* Cover image (usa la ruta en frontmatter: 'coverImage' o, si no existe, 'image'). Si no hay ninguna, no renderiza la sección */}
+          { (post.coverImage || post.image) ? (
+            <div className="mt-6">
+              <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden">
+                <CoverImage src={post.coverImage || post.image} alt={post.title} fill className="object-cover w-full h-full rounded-lg" />
+              </div>
+            </div>
+          ) : null}
+
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
@@ -106,7 +118,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         </header>
 
         {/* Contenido */}
-        <div className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-pink-400 prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-800">
+        <div className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-white prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-pink-400 prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-800 prose-li:text-white">
           <MDXRemote
             source={post.content}
             options={{
@@ -117,6 +129,36 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
             }}
           />
         </div>
+
+        {/* Fuentes/Referencias */}
+        {post.sources && post.sources.length > 0 && (
+          <div className="mt-12 p-6 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl">
+            <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              Fuentes y Referencias
+            </h3>
+            <ul className="space-y-3">
+              {post.sources.map((source, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <span className="text-blue-400 font-semibold mt-1">{index + 1}.</span>
+                  <div>
+                    <p className="text-white font-medium">{source.title}</p>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 text-sm transition-colors duration-300 break-all"
+                    >
+                      {source.url}
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Share buttons */}
         <div className="mt-16 pt-8 border-t border-gray-800">

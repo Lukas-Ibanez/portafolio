@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#g)" />
+  <g transform="translate(0,0)">
+    <g transform="translate(75,75) scale(1)">
+      <rect x="0" y="0" width="1050" height="450" rx="24" ry="24" fill="rgba(255,255,255,0.06)" />
+      <g transform="translate(40,40)">
+        <path d="M0 0h140v14H0z" fill="rgba(255,255,255,0.08)" />
+        <path d="M0 34h420v14H0z" fill="rgba(255,255,255,0.06)" />
+        <circle cx="620" cy="180" r="90" fill="rgba(255,255,255,0.04)" />
+        <g transform="translate(120,80)">
+          <rect x="0" y="0" width="280" height="160" rx="12" fill="rgba(255,255,255,0.02)" />
+          <rect x="16" y="16" width="248" height="56" rx="8" fill="rgba(255,255,255,0.04)" />
+        </g>
+        <g transform="translate(420,260)">
+          <rect x="0" y="0" width="160" height="80" rx="8" fill="rgba(255,255,255,0.03)" />
+        </g>
+      </g>
+      <g transform="translate(880,40)">
+        <g fill="white" opacity="0.9">
+          <path d="M24 10c0-.6-.4-1-1-1H5c-.6 0-1 .4-1 1v38c0 .6.4 1 1 1h18c.6 0 1-.4 1-1V10zM7 4h10v4H7V4z"/>
+          <rect x="8" y="18" width="8" height="2" rx="1" />
+          <rect x="8" y="22" width="8" height="2" rx="1" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

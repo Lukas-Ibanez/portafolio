@@ -6,7 +6,6 @@ import Link from 'next/link';
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -19,100 +18,6 @@ export default function Hero() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  // Canvas con efecto de ondas/ripple único
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    class Wave {
-      x: number;
-      y: number;
-      radius: number;
-      maxRadius: number;
-      speed: number;
-      color: string;
-      alpha: number;
-
-      constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-        this.radius = 0;
-        this.maxRadius = Math.random() * 200 + 100;
-        this.speed = Math.random() * 2 + 1;
-        const colors = ['59, 130, 246', '139, 92, 246', '6, 182, 212', '168, 85, 247'];
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.alpha = 0.6;
-      }
-
-      update() {
-        this.radius += this.speed;
-        this.alpha = (1 - this.radius / this.maxRadius) * 0.6;
-      }
-
-      draw() {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(${this.color}, ${this.alpha})`;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      isFinished() {
-        return this.radius >= this.maxRadius;
-      }
-    }
-
-    const waves: Wave[] = [];
-    let animationId: number;
-
-    const createWave = () => {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      waves.push(new Wave(x, y));
-    };
-
-    // Crear ondas periódicamente
-    const waveInterval = setInterval(createWave, 500);
-
-    function animate() {
-      if (!ctx) return;
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      for (let i = waves.length - 1; i >= 0; i--) {
-        waves[i].update();
-        waves[i].draw();
-        if (waves[i].isFinished()) {
-          waves.splice(i, 1);
-        }
-      }
-
-      animationId = requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      clearInterval(waveInterval);
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
-    };
   }, []);
 
   useEffect(() => {
@@ -211,27 +116,7 @@ export default function Hero() {
           });
         });
 
-        // Animación continua de hover para cada letra (más sutil)
-        letters.forEach((letter: any, index: number) => {
-          const hoverAnimations = [
-            { y: -8, duration: 1.5 },
-            { y: 8, duration: 1.8 },
-            { scale: 1.05, duration: 1.6 },
-            { rotationZ: 3, duration: 1.4 },
-            { rotationZ: -3, duration: 1.7 },
-            { y: -6, scale: 1.03, duration: 1.5 },
-          ];
-          
-          const hover = hoverAnimations[index % hoverAnimations.length];
-          
-          gsap.to(letter, {
-            ...hover,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            delay: 2 + (index * 0.1),
-          });
-        });
+        // Las letras se quedan estáticas después de la animación inicial para mayor profesionalismo
 
         // Subtítulo - cada palabra con animación única
         gsap.to('.subtitle-word', {
@@ -318,10 +203,10 @@ export default function Hero() {
           delay: 0.5,
         });
 
-        // Animación orbital continua
+        // Animación orbital continua (muy lenta y sutil)
         gsap.to('.orbital-element', {
           rotation: 360,
-          duration: 20,
+          duration: 60,
           repeat: -1,
           ease: 'none',
           delay: 1.5,
@@ -363,41 +248,8 @@ export default function Hero() {
   return (
     <div
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
+      className="relative min-h-screen flex items-center justify-center"
     >
-      {/* Canvas con efecto único de ondas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 opacity-40"
-      />
-
-      {/* Grid de fondo animado */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)',
-          backgroundSize: '50px 50px',
-        }}></div>
-      </div>
-
-      {/* Elementos orbitales decorativos */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="orbital-element absolute top-20 left-20 w-32 h-32 border-2 border-blue-500/30 rounded-full parallax-fast"></div>
-        <div className="orbital-element absolute top-40 right-32 w-24 h-24 border-2 border-purple-500/30 rounded-full parallax-medium"></div>
-        <div className="orbital-element absolute bottom-32 left-40 w-40 h-40 border-2 border-cyan-500/30 rounded-full parallax-slow"></div>
-        <div className="orbital-element absolute bottom-20 right-20 w-28 h-28 border-2 border-pink-500/30 rounded-full parallax-fast"></div>
-        
-        {/* Elementos geométricos adicionales */}
-        <div className="parallax-medium absolute top-1/4 left-1/4 w-16 h-16 border-2 border-blue-400/20 rotate-45"></div>
-        <div className="parallax-fast absolute top-3/4 right-1/4 w-20 h-20 border-2 border-purple-400/20 rotate-12"></div>
-      </div>
-
-      {/* Gradientes luminosos de fondo */}
-      <div className="absolute inset-0">
-        <div className="parallax-slow absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px]"></div>
-        <div className="parallax-medium absolute top-1/2 right-0 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px]"></div>
-        <div className="parallax-fast absolute bottom-0 left-1/3 w-[450px] h-[450px] bg-cyan-600/20 rounded-full blur-[100px]"></div>
-      </div>
-
       {/* Contenido principal */}
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-7xl mx-auto">
@@ -528,14 +380,6 @@ export default function Hero() {
               </span>
             </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Scroll Indicator mejorado */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-        <span className="text-sm text-gray-400 font-medium tracking-wider">DESCUBRE MÁS</span>
-        <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center pt-2">
-          <div className="w-1.5 h-3 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full animate-bounce"></div>
         </div>
       </div>
     </div>

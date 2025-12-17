@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import CoverImage from '@/components/CoverImage';
 import { Post } from '@/lib/blog-utils';
 
 interface BlogCardProps {
@@ -14,18 +15,17 @@ export default function BlogCard({ post }: BlogCardProps) {
       className="blog-card group block bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-500 hover:scale-105"
     >
       {/* Imagen placeholder */}
-      <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        
-        <div className="relative z-10 text-gray-600 group-hover:text-gray-500 transition-colors duration-500">
-          <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-              clipRule="evenodd"
-            />
-          </svg>
+      <div className="relative h-48 flex items-center justify-center overflow-hidden bg-gray-700">
+        <div className="absolute inset-0">
+          <CoverImage
+            src={post.image || post.coverImage}
+            alt={post.title}
+            fill
+            className="object-cover w-full h-full"
+          />
         </div>
+
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
         {/* Badge de categoría */}
         <div

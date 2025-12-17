@@ -13,7 +13,9 @@ export interface Post {
   tags: string[];
   readTime: string;
   image?: string;
+  coverImage?: string;
   content: string;
+  sources?: { title: string; url: string }[];
 }
 
 export function getPostSlugs(category?: 'programacion' | 'otros'): string[] {
@@ -55,7 +57,9 @@ export function getPostBySlug(slug: string, category?: 'programacion' | 'otros')
       tags: data.tags || [],
       readTime: data.readTime || calculateReadTime(content),
       image: data.image,
+      coverImage: data.coverImage || undefined,
       content,
+      sources: data.sources || [],
     };
   }
 
@@ -77,7 +81,9 @@ export function getPostBySlug(slug: string, category?: 'programacion' | 'otros')
         tags: data.tags || [],
         readTime: data.readTime || calculateReadTime(content),
         image: data.image,
+        coverImage: data.coverImage || undefined,
         content,
+        sources: data.sources || [],
       };
     }
   }

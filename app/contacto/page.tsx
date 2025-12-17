@@ -52,7 +52,7 @@ export default function ContactoPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black pt-32 pb-20">
+    <div className="min-h-screen pt-32 pb-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="max-w-4xl mx-auto text-center mb-16">

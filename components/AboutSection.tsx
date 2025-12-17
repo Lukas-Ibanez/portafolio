@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import Image from 'next/image';
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -10,24 +11,26 @@ export default function AboutSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Animación del título y descripción
-      gsap.from('.about-title', {
+      gsap.set('.about-title', { opacity: 0, y: 50 });
+      gsap.to('.about-title', {
         scrollTrigger: {
           trigger: '.about-title',
           start: 'top 80%',
         },
-        y: 50,
-        opacity: 0,
+        y: 0,
+        opacity: 1,
         duration: 1,
         ease: 'power3.out',
       });
 
-      gsap.from('.about-text', {
+      gsap.set('.about-text', { opacity: 0, y: 30 });
+      gsap.to('.about-text', {
         scrollTrigger: {
           trigger: '.about-text',
           start: 'top 80%',
         },
-        y: 30,
-        opacity: 0,
+        y: 0,
+        opacity: 1,
         duration: 0.8,
         stagger: 0.2,
         ease: 'power3.out',
@@ -36,13 +39,14 @@ export default function AboutSection() {
       // Animación de las skills
       const skillCards = skillsRef.current?.querySelectorAll('.skill-card');
       if (skillCards) {
-        gsap.from(skillCards, {
+        gsap.set(skillCards, { opacity: 0, y: 50 });
+        gsap.to(skillCards, {
           scrollTrigger: {
             trigger: skillsRef.current,
             start: 'top 80%',
           },
-          y: 50,
-          opacity: 0,
+          y: 0,
+          opacity: 1,
           duration: 0.8,
           stagger: 0.1,
           ease: 'power3.out',
@@ -55,55 +59,129 @@ export default function AboutSection() {
 
   const skills = [
     {
-      category: 'Front-End',
-      items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP'],
+      category: 'Desarrollo Web',
+      items: [
+        { name: 'Django', logo: '/logos/django.webp' },
+        { name: 'Nuxt', logo: '/logos/nuxt.webp' },
+        { name: 'Astro', logo: '/logos/atro.webp' },
+        { name: 'WordPress', logo: '/logos/word-press-logo.png' },
+        { name: 'WooCommerce', logo: '/logos/WooCommerce.webp' }
+      ],
       color: 'from-blue-500 to-cyan-500',
     },
     {
-      category: 'Back-End',
-      items: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'REST APIs'],
+      category: 'Lenguajes',
+      items: [
+        { name: 'Python', logo: '/logos/Python.webp' },
+        { name: 'Java', logo: '/logos/java.webp' },
+        { name: 'PHP', logo: '/logos/PHP.webp' },
+        { name: 'JavaScript', logo: '/logos/javascript.webp' },
+        { name: 'Vue', logo: '/logos/Vue.webp' }
+      ],
       color: 'from-purple-500 to-pink-500',
     },
     {
-      category: 'Herramientas',
-      items: ['Git', 'Docker', 'Vercel', 'VS Code', 'Figma'],
+      category: 'Frontend & Mobile',
+      items: [
+        { name: 'CSS Nativo', logo: '/logos/CSS3.webp' },
+        { name: 'Bootstrap', logo: '/logos/Bootstrap.webp' },
+        { name: 'Tailwind CSS', logo: '/logos/Tailwind_CSS.webp' },
+        { name: 'Ionic', logo: '/logos/ionic.webp' }
+      ],
+      color: 'from-cyan-500 to-blue-500',
+    },
+    {
+      category: 'Base de Datos',
+      items: [
+        { name: 'MySQL', logo: '/logos/mysql.webp' },
+        { name: 'PostgreSQL', logo: '/logos/Postgresql.webp' },
+        { name: 'Oracle', logo: '/logos/Oracle.webp' }
+      ],
       color: 'from-orange-500 to-red-500',
+    },
+    {
+      category: 'DevOps & Herramientas',
+      items: [
+        { name: 'GitHub', logo: '/logos/github-white.webp' },
+        { name: 'Bitbucket', logo: '/logos/bitbucket.webp' },
+        { name: 'Google Analytics', logo: '/logos/Google-Analytics.webp' },
+        { name: 'Linux/Ubuntu', logo: '/logos/linux.webp' }
+      ],
+      color: 'from-green-500 to-emerald-500',
     },
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 bg-gray-900">
-      <div className="container mx-auto px-4">
+    <section ref={sectionRef} className="relative py-20">
+      {/* Grid de fondo animado */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+        }}></div>
+      </div>
+
+      {/* Gradientes luminosos de fondo */}
+      <div className="absolute inset-0">
+        <div className="parallax-slow absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div className="parallax-medium absolute top-1/2 right-0 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px]"></div>
+        <div className="parallax-fast absolute bottom-0 left-1/3 w-[450px] h-[450px] bg-cyan-600/20 rounded-full blur-[100px]"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
-          {/* Título */}
-          <h2 className="about-title text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-8">
+          {/* Título centrado */}
+          <h2 className="about-title text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-16">
             <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
               Sobre Mí
             </span>
           </h2>
 
-          {/* Descripción */}
-          <div className="max-w-3xl mx-auto mb-16 space-y-4">
-            <p className="about-text text-lg md:text-xl text-gray-300 text-center">
-              Soy un <span className="text-blue-400 font-semibold">Programador Computacional</span> y{' '}
-              <span className="text-purple-400 font-semibold">Desarrollador Full-Stack</span> con{' '}
-              <span className="text-cyan-400 font-semibold">2 años de experiencia</span> creando
-              aplicaciones web modernas y escalables.
-            </p>
-            <p className="about-text text-lg text-gray-400 text-center">
-              Mi especialización está en el <span className="text-blue-400">desarrollo Front-End</span>,
-              donde disfruto transformando diseños en experiencias interactivas, fluidas y
-              accesibles. Tengo experiencia trabajando con las últimas tecnologías del ecosistema
-              JavaScript y me apasiona crear interfaces que deleiten a los usuarios.
-            </p>
+          {/* Contenedor principal: Foto + Descripción */}
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8 mb-16 items-center">
+            {/* Foto a la izquierda */}
+            <div className="flex-shrink-0">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <div className="relative w-64 h-64 bg-gray-800 rounded-full flex items-center justify-center border-4 border-gray-900">
+                  <svg
+                    className="w-32 h-32 text-gray-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Descripción a la derecha con texto alineado a la izquierda */}
+            <div className="space-y-4 flex-1">
+              <p className="about-text text-lg md:text-xl text-gray-300 text-left">
+                Soy un <span className="text-blue-400 font-semibold">Programador Computacional</span> y{' '}
+                <span className="text-purple-400 font-semibold">Desarrollador Full-Stack</span> con{' '}
+                <span className="text-cyan-400 font-semibold">2 años de experiencia</span> creando
+                aplicaciones web modernas y escalables.
+              </p>
+              <p className="about-text text-lg text-gray-400 text-left">
+                Mi especialización está en el <span className="text-blue-400">desarrollo Front-End</span>,
+                donde disfruto transformando diseños en experiencias interactivas, fluidas y
+                accesibles. Tengo experiencia trabajando con las últimas tecnologías del ecosistema
+                JavaScript y me apasiona crear interfaces que deleiten a los usuarios.
+              </p>
+            </div>
           </div>
 
           {/* Skills Grid */}
-          <div ref={skillsRef} className="grid md:grid-cols-3 gap-8">
+          <div ref={skillsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {skills.map((skill) => (
               <div
                 key={skill.category}
-                className="skill-card group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:scale-105"
+                className="skill-card opacity-0 group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:scale-105"
               >
                 {/* Glow effect */}
                 <div
@@ -119,47 +197,29 @@ export default function AboutSection() {
                   <ul className="space-y-2">
                     {skill.items.map((item) => (
                       <li
-                        key={item}
-                        className="flex items-center text-gray-300 group-hover:text-white transition-colors duration-300"
+                        key={item.name}
+                        className="flex items-center text-gray-300 group-hover:text-white transition-colors duration-300 mb-3"
                       >
-                        <svg
-                          className="w-5 h-5 mr-2 text-blue-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {item}
+                        {item.logo ? (
+                          <div className="w-6 h-6 mr-3 relative flex-shrink-0 flex justify-center items-center">
+                            <Image 
+                              src={item.logo} 
+                              alt={item.name}
+                              width={24}
+                              height={24}
+                              className="object-contain"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-2xl mr-3">{item.icon}</span>
+                        )}
+                        <span>{item.name}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Foto placeholder */}
-          <div className="mt-16 flex justify-center">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-              <div className="relative w-48 h-48 bg-gray-800 rounded-full flex items-center justify-center border-4 border-gray-900">
-                <svg
-                  className="w-24 h-24 text-gray-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
           </div>
         </div>
       </div>
