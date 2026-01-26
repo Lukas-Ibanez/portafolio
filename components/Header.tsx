@@ -139,26 +139,53 @@ export default function Header() {
       {/* Mobile Menu */}
       <div
         ref={menuRef}
-        className="md:hidden fixed top-0 right-0 bottom-0 w-full max-w-sm bg-black/95 backdrop-blur-lg transform translate-x-full z-50"
+        className="md:hidden fixed top-0 right-0 bottom-0 w-full max-w-sm bg-gray-900 backdrop-blur-lg transform translate-x-full z-50 border-l border-gray-800"
       >
-        <div className="flex flex-col items-start gap-8 p-8 pt-24">
-          {navLinks.map((link, index) => (
-            <Link
-              key={link.href}
-              href={link.href}
+        <div className="flex flex-col h-full">
+          {/* Header del menú con botón de cerrar */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-800">
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+              Menú
+            </span>
+            <button
               onClick={() => setIsMenuOpen(false)}
-              className={`text-2xl font-medium transition-colors duration-300 ${
-                pathname === link.href
-                  ? 'text-blue-500'
-                  : 'text-gray-300 hover:text-white'
-              }`}
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+              aria-label="Cerrar menú"
             >
-              {link.label}
-            </Link>
-          ))}
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Links del menú */}
+          <div className="flex flex-col gap-2 p-6">
+            {navLinks.map((link, index) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={`text-xl font-medium transition-colors duration-300 py-3 px-4 rounded-lg ${
+                  pathname === link.href
+                    ? 'text-white bg-gradient-to-r from-blue-600 to-purple-600'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
+      
+      {/* Overlay de fondo cuando el menú está abierto */}
+      {isMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
     </header>
   );
 }
