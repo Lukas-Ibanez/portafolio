@@ -53,7 +53,13 @@ export default function ContactForm() {
     const field = formRef.current?.querySelector(`[name="${fieldName}"]`);
     if (field) {
       gsap.to(field, {
-        x: [-10, 10, -10, 10, 0],
+        keyframes: [
+          { x: -10 },
+          { x: 10 },
+          { x: -10 },
+          { x: 10 },
+          { x: 0 }
+        ],
         duration: 0.4,
         ease: 'power2.out',
       });
