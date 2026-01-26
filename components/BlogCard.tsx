@@ -2,13 +2,19 @@
 
 import Link from 'next/link';
 import CoverImage from '@/components/CoverImage';
-import { Post } from '@/lib/blog-utils';
+import { getImageUrl } from '@/lib/blog-utils-sanity';
 
 interface BlogCardProps {
-  post: Post;
+  post: any; // Puede ser Post de MDX o de Sanity
 }
 
 export default function BlogCard({ post }: BlogCardProps) {
+  // Soporte para ambos sistemas (MDX y Sanity)
+  const date = post.publishedAt || post.date;
+  const imageUrl = post.coverImage 
+    ? (typeof post.coverImage === 'string' ? post.coverImage : getImageUrl(post.coverImage))
+    : (post.image || undefined);
+
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -18,7 +24,7 @@ export default function BlogCard({ post }: BlogCardProps) {
       <div className="relative h-48 flex items-center justify-center overflow-hidden bg-gray-700">
         <div className="absolute inset-0">
           <CoverImage
-            src={post.image || post.coverImage}
+            src={imageUrl}
             alt={post.title}
             fill
             className="object-cover w-full h-full"
@@ -42,8 +48,8 @@ export default function BlogCard({ post }: BlogCardProps) {
       {/* Contenido */}
       <div className="p-6">
         <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
-          <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString('es-ES', {
+          <time dateTime={date}>
+            {new Date(date).toLocaleDateString('es-ES', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
