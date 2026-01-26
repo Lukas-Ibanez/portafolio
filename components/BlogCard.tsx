@@ -70,7 +70,7 @@ export default function BlogCard({ post }: BlogCardProps) {
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {post.tags.slice(0, 3).map((tag) => (
+            {post.tags.slice(0, 3).map((tag: string) => (
               <span
                 key={tag}
                 className="px-2 py-1 bg-gray-700/50 text-gray-400 text-xs rounded border border-gray-600 group-hover:border-blue-500/50 group-hover:text-blue-400 transition-all duration-300"
