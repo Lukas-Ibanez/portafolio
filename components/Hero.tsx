@@ -29,7 +29,6 @@ export default function Hero() {
       gsap.set('.info-card', { opacity: 0, scale: 0.5, rotationY: -180 });
       gsap.set('.cta-button', { opacity: 0, scale: 0 });
       gsap.set('.stat-item', { opacity: 0, scale: 0 });
-      gsap.set('.orbital-element', { opacity: 0, scale: 0 });
       gsap.set('.tech-icon', { opacity: 0, scale: 0 });
 
       // Pequeño delay para asegurar que el DOM esté listo
@@ -193,24 +192,7 @@ export default function Hero() {
           delay: 2.8,
         });
 
-        // Elementos decorativos orbitales
-        gsap.to('.orbital-element', {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          stagger: 0.1,
-          ease: 'power3.out',
-          delay: 0.5,
-        });
 
-        // Animación orbital continua (muy lenta y sutil)
-        gsap.to('.orbital-element', {
-          rotation: 360,
-          duration: 60,
-          repeat: -1,
-          ease: 'none',
-          delay: 1.5,
-        });
       });
     }, heroRef);
 

@@ -14,34 +14,41 @@ export default function ContactoPageClient() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      tl.from(titleRef.current, {
-        y: 50,
-        opacity: 0,
+      // Configurar estados iniciales explícitamente
+      gsap.set(titleRef.current, { y: 50, opacity: 0 });
+      gsap.set(descriptionRef.current, { y: 30, opacity: 0 });
+      gsap.set(formContainerRef.current, { y: 50, opacity: 0 });
+      gsap.set(infoRef.current, { y: 50, opacity: 0 });
+
+      // Animar secuencialmente
+      tl.to(titleRef.current, {
+        y: 0,
+        opacity: 1,
         duration: 1,
       })
-        .from(
+        .to(
           descriptionRef.current,
           {
-            y: 30,
-            opacity: 0,
+            y: 0,
+            opacity: 1,
             duration: 0.8,
           },
           '-=0.5'
         )
-        .from(
+        .to(
           formContainerRef.current,
           {
-            y: 50,
-            opacity: 0,
+            y: 0,
+            opacity: 1,
             duration: 0.8,
           },
           '-=0.5'
         )
-        .from(
+        .to(
           infoRef.current,
           {
-            y: 50,
-            opacity: 0,
+            y: 0,
+            opacity: 1,
             duration: 0.8,
           },
           '-=0.6'
@@ -58,13 +65,13 @@ export default function ContactoPageClient() {
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h1
             ref={titleRef}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 opacity-0"
+            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
           >
             <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
               Contacto
             </span>
           </h1>
-          <p ref={descriptionRef} className="text-xl text-gray-400 opacity-0">
+          <p ref={descriptionRef} className="text-xl text-gray-400">
             ¿Tienes un proyecto en mente o simplemente quieres conversar? ¡Me encantaría saber de
             ti!
           </p>
@@ -72,7 +79,7 @@ export default function ContactoPageClient() {
 
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12">
           {/* Formulario */}
-          <div ref={formContainerRef} className="opacity-0">
+          <div ref={formContainerRef}>
             <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
               <h2 className="text-2xl font-bold text-white mb-6">Envíame un mensaje</h2>
               <ContactForm />
@@ -80,7 +87,7 @@ export default function ContactoPageClient() {
           </div>
 
           {/* Información de contacto */}
-          <div ref={infoRef} className="opacity-0">
+          <div ref={infoRef}>
             <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 h-full flex flex-col justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-6">Información de contacto</h2>
