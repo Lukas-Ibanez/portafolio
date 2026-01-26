@@ -200,19 +200,15 @@ export default function AboutSection() {
                         key={item.name}
                         className="flex items-center text-gray-300 group-hover:text-white transition-colors duration-300 mb-3"
                       >
-                        {item.logo ? (
-                          <div className="w-6 h-6 mr-3 relative flex-shrink-0 flex justify-center items-center">
-                            <Image 
-                              src={item.logo} 
-                              alt={item.name}
-                              width={24}
-                              height={24}
-                              className="object-contain"
-                            />
-                          </div>
-                        ) : (
-                          <span className="text-2xl mr-3">{item.icon}</span>
-                        )}
+                        <div className="w-6 h-6 mr-3 relative flex-shrink-0 flex justify-center items-center">
+                          <Image 
+                            src={item.logo} 
+                            alt={item.name}
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                          />
+                        </div>
                         <span>{item.name}</span>
                       </li>
                     ))}
