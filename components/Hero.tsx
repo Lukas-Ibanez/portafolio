@@ -243,12 +243,42 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center"
     >
       {/* Contenido principal */}
-      <div className="container mx-auto px-4 py-20 relative z-10">
+      <div className="container mx-auto px-2 sm:px-4 py-20 relative z-10">
         <div className="max-w-7xl mx-auto">
           
           {/* Nombre con animación individual por letra */}
           <div className="text-center mb-12">
-            <div className="inline-block">
+            {/* Mobile: dos líneas */}
+            <div className="md:hidden">
+              <div className="mb-2">
+                {'LUKAS'.split('').map((char, index) => (
+                  <span
+                    key={index}
+                    className="name-letter inline-block text-5xl font-black bg-gradient-to-br from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent transform-gpu"
+                    style={{
+                      textShadow: '0 0 60px rgba(139, 92, 246, 0.8)',
+                    }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+              <div>
+                {'IBÁÑEZ'.split('').map((char, index) => (
+                  <span
+                    key={index + 5}
+                    className="name-letter inline-block text-5xl font-black bg-gradient-to-br from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent transform-gpu"
+                    style={{
+                      textShadow: '0 0 60px rgba(139, 92, 246, 0.8)',
+                    }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+            </div>
+            {/* Desktop: una línea */}
+            <div className="hidden md:inline-block">
               {name.split('').map((char, index) => (
                 <span
                   key={index}

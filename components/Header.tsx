@@ -139,7 +139,7 @@ export default function Header() {
       {/* Mobile Menu */}
       <div
         ref={menuRef}
-        className="md:hidden fixed top-0 right-0 bottom-0 w-full max-w-sm bg-black/95 backdrop-blur-lg transform translate-x-full"
+        className="md:hidden fixed top-0 right-0 bottom-0 w-full max-w-sm bg-black/95 backdrop-blur-lg transform translate-x-full z-50"
       >
         <div className="flex flex-col items-start gap-8 p-8 pt-24">
           {navLinks.map((link, index) => (
