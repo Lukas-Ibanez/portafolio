@@ -11,19 +11,24 @@ export default function Footer() {
     const footer = footerRef.current;
     if (!footer) return;
 
-    // Animación de entrada cuando el footer entra en viewport
-    gsap.from(footer, {
-      scrollTrigger: {
-        trigger: footer,
-        start: 'top bottom',
-        end: 'bottom bottom',
-        toggleActions: 'play none none reverse',
-      },
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
+    // Configurar estado inicial visible
+    gsap.set(footer, { opacity: 1 });
+
+    // Animación de entrada cuando el footer entra en viewport (opcional)
+    const ctx = gsap.context(() => {
+      gsap.from(footer, {
+        scrollTrigger: {
+          trigger: footer,
+          start: 'top bottom-=100',
+          toggleActions: 'play none none none',
+        },
+        y: 30,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
     });
+
+    return () => ctx.revert();
   }, []);
 
   const socialLinks = [
