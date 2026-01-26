@@ -162,16 +162,20 @@ export default function AboutSection() {
             {/* Descripción a la derecha con texto alineado a la izquierda */}
             <div className="space-y-4 flex-1">
               <p className="about-text text-lg md:text-xl text-gray-300 text-left">
-                Soy un <span className="text-blue-400 font-semibold">Programador Computacional</span> y{' '}
+                Soy <span className="text-blue-400 font-semibold">Programador Computacional</span> enfocado en {' '}
                 <span className="text-purple-400 font-semibold">Desarrollador Full-Stack</span> con{' '}
                 <span className="text-cyan-400 font-semibold">2 años de experiencia</span> creando
                 aplicaciones web modernas y escalables.
               </p>
               <p className="about-text text-lg text-gray-400 text-left">
-                Mi especialización está en el <span className="text-blue-400">desarrollo Front-End</span>,
-                donde disfruto transformando diseños en experiencias interactivas, fluidas y
-                accesibles. Tengo experiencia trabajando con las últimas tecnologías del ecosistema
-                JavaScript y me apasiona crear interfaces que deleiten a los usuarios.
+                Mi especialización está en la <span className="text-blue-400">resolución de problemas complejos</span> y 
+                la <span className="text-purple-400">arquitectura de soluciones escalables</span>. Me apasiona investigar 
+                a fondo cada desafío, analizando desde el diseño de <span className="text-cyan-400">bases de datos optimizadas</span> hasta 
+                la implementación de código limpio y mantenible. Evalúo la <span className="text-blue-400">escalabilidad</span>, 
+                el <span className="text-purple-400">rendimiento</span> y la <span className="text-cyan-400">seguridad</span> de 
+                cada solución, anticipando necesidades futuras para mitigar el riesgo desde la fase de diseño. Mi enfoque se centra 
+                en construir sistemas robustos que puedan crecer con el negocio, aplicando patrones de diseño, mejores prácticas 
+                de desarrollo y evaluando constantemente las tecnologías del mercado para ofrecer soluciones técnicas óptimas y sostenibles.
               </p>
             </div>
           </div>
