@@ -31,7 +31,7 @@ export default function NavigationCards() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-20">
+    <section ref={sectionRef} className="relative py-20 overflow-hidden">
       {/* Grid de fondo animado */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{

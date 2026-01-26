@@ -240,7 +240,7 @@ export default function Hero() {
   return (
     <div
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Contenido principal */}
       <div className="container mx-auto px-2 sm:px-4 py-20 relative z-10">
