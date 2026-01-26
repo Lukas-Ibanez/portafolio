@@ -134,7 +134,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               Fuentes y Referencias
             </h3>
             <ul className="space-y-3">
-              {post.sources.map((source, index) => (
+              {post.sources.map((source: { title: string; url: string }, index: number) => (
                 <li key={index} className="flex items-start gap-3">
                   <span className="text-blue-400 font-semibold mt-1">{index + 1}.</span>
                   <div>
