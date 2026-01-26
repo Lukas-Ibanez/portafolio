@@ -64,9 +64,9 @@ export default function Footer() {
   return (
     <footer ref={footerRef} className="border-t border-gray-800 mt-20">
       <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="flex flex-col items-center gap-8">
           {/* Logo y descripción */}
-          <div className="text-center md:text-left">
+          <div className="text-center">
             <Link href="/" className="inline-block group">
               <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-110">
                 Lukas Ibáñez
