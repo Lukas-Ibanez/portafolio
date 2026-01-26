@@ -46,7 +46,7 @@ export default function RootLayout({
         <div className="relative z-10">
           <GSAPProvider>
             <Header />
-            <main className="min-h-screen">
+            <main>
               {children}
             </main>
             <Footer />
