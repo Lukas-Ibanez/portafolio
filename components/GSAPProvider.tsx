@@ -23,26 +23,36 @@ export default function GSAPProvider({ children }: { children: React.ReactNode }
 
   // Apply parallax effect to background gradients
   useEffect(() => {
-    gsap.to('.parallax-fast', {
-      x: mousePosition.x * 40,
-      y: mousePosition.y * 40,
-      duration: 0.3,
-      ease: 'power2.out',
-    });
+    const parallaxFast = document.querySelectorAll('.parallax-fast');
+    const parallaxMedium = document.querySelectorAll('.parallax-medium');
+    const parallaxSlow = document.querySelectorAll('.parallax-slow');
 
-    gsap.to('.parallax-medium', {
-      x: mousePosition.x * 20,
-      y: mousePosition.y * 20,
-      duration: 0.5,
-      ease: 'power2.out',
-    });
+    if (parallaxFast.length > 0) {
+      gsap.to(parallaxFast, {
+        x: mousePosition.x * 40,
+        y: mousePosition.y * 40,
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+    }
 
-    gsap.to('.parallax-slow', {
-      x: mousePosition.x * 10,
-      y: mousePosition.y * 10,
-      duration: 0.8,
-      ease: 'power2.out',
-    });
+    if (parallaxMedium.length > 0) {
+      gsap.to(parallaxMedium, {
+        x: mousePosition.x * 20,
+        y: mousePosition.y * 20,
+        duration: 0.5,
+        ease: 'power2.out',
+      });
+    }
+
+    if (parallaxSlow.length > 0) {
+      gsap.to(parallaxSlow, {
+        x: mousePosition.x * 10,
+        y: mousePosition.y * 10,
+        duration: 0.8,
+        ease: 'power2.out',
+      });
+    }
   }, [mousePosition]);
 
   return <>{children}</>;
