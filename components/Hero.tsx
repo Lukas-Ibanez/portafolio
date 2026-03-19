@@ -26,96 +26,64 @@ export default function Hero() {
       gsap.set('.name-letter', { opacity: 0 });
       gsap.set('.subtitle-word', { opacity: 0, y: 50, rotationY: 90 });
       gsap.set('.description-text', { opacity: 0, y: 30 });
-      gsap.set('.info-card', { opacity: 0, scale: 0.5, rotationY: -180 });
+      gsap.set('.info-card', { opacity: 0, y: 60, scale: 0.9 });
       gsap.set('.cta-button', { opacity: 0, scale: 0 });
       gsap.set('.stat-item', { opacity: 0, scale: 0 });
-      gsap.set('.tech-icon', { opacity: 0, scale: 0 });
+      gsap.set('.tech-icon', { opacity: 0, y: 15 });
 
       // Pequeño delay para asegurar que el DOM esté listo
       gsap.delayedCall(0.1, () => {
-        // Animación ÚNICA para cada letra del nombre (estilo GSAP.com)
-        const letters = gsap.utils.toArray('.name-letter');
-        
-        letters.forEach((letter: any, index: number) => {
-          // Cada letra tendrá propiedades iniciales y animaciones completamente diferentes
-          // Versión optimizada para evitar superposiciones
-          const animations = [
-            // Letra 1: Rotación 3D suave
-            { 
-              from: { rotationX: -90, y: -50, scale: 0, opacity: 0 },
-              to: { rotationX: 0, y: 0, scale: 1, opacity: 1, ease: 'back.out(1.5)', duration: 1 }
-            },
-            // Letra 2: Escala con blur
-            { 
-              from: { scale: 2, opacity: 0, filter: 'blur(10px)' },
-              to: { scale: 1, opacity: 1, filter: 'blur(0px)', ease: 'power2.out', duration: 0.9 }
-            },
-            // Letra 3: Rotación Y
-            { 
-              from: { rotationY: 90, opacity: 0, scale: 0.5 },
-              to: { rotationY: 0, opacity: 1, scale: 1, ease: 'power3.out', duration: 1 }
-            },
-            // Letra 4: Desde abajo
-            { 
-              from: { y: 50, scale: 0.5, opacity: 0 },
-              to: { y: 0, scale: 1, opacity: 1, ease: 'back.out(1.7)', duration: 1.1 }
-            },
-            // Letra 5: Rotación Z
-            { 
-              from: { rotationZ: 180, scale: 0, opacity: 0 },
-              to: { rotationZ: 0, scale: 1, opacity: 1, ease: 'elastic.out(1, 0.5)', duration: 1.2 }
-            },
-            // Letra 6: Escala simple
-            { 
-              from: { scale: 0, opacity: 0 },
-              to: { scale: 1, opacity: 1, ease: 'back.out(2)', duration: 0.9 }
-            },
-            // Letra 7: Rotación X inversa
-            { 
-              from: { rotationX: 90, y: 30, opacity: 0, scale: 0.7 },
-              to: { rotationX: 0, y: 0, opacity: 1, scale: 1, ease: 'power2.out', duration: 1 }
-            },
-            // Letra 8: Zoom suave
-            { 
-              from: { scale: 0.3, opacity: 0 },
-              to: { scale: 1, opacity: 1, ease: 'elastic.out(1, 0.6)', duration: 1.1 }
-            },
-            // Letra 9: Desde arriba
-            { 
-              from: { y: -50, opacity: 0, scale: 0.6 },
-              to: { y: 0, opacity: 1, scale: 1, ease: 'bounce.out', duration: 1.2 }
-            },
-            // Letra 10: Rotación Y inversa
-            { 
-              from: { rotationY: -90, opacity: 0, scale: 0.5 },
-              to: { rotationY: 0, opacity: 1, scale: 1, ease: 'power3.out', duration: 1 }
-            },
-            // Letra 11: Blur fade in
-            { 
-              from: { scale: 0.5, opacity: 0, filter: 'blur(8px)' },
-              to: { scale: 1, opacity: 1, filter: 'blur(0px)', ease: 'power2.out', duration: 0.9 }
-            },
-            // Letra 12: Rotación completa
-            { 
-              from: { rotationZ: -180, scale: 0, opacity: 0 },
-              to: { rotationZ: 0, scale: 1, opacity: 1, ease: 'back.out(1.5)', duration: 1.1 }
-            },
-          ];
+        // === Animación cinematográfica del nombre (izquierda → derecha) ===
+        const letters = gsap.utils.toArray('.name-letter') as HTMLElement[];
 
-          // Seleccionar animación basada en el índice (se repite el patrón si hay más letras)
-          const anim = animations[index % animations.length];
-          
-          // Aplicar estado inicial
-          gsap.set(letter, anim.from);
-          
-          // Animar con delay escalonado
-          gsap.to(letter, {
-            ...anim.to,
-            delay: index * 0.06,
+        // Estado inicial: cada letra parte desde la izquierda, desplazada y escalada
+        letters.forEach((letter, i) => {
+          gsap.set(letter, {
+            x: -600 - i * 40,
+            y: gsap.utils.random(-80, 80),
+            rotation: gsap.utils.random(-120, -30),
+            scale: 0,
+            opacity: 0,
           });
         });
 
-        // Las letras se quedan estáticas después de la animación inicial para mayor profesionalismo
+        // Timeline fluida sin pausas entre fases
+        const nameTl = gsap.timeline();
+
+        // Fase 1: Barrido izquierda → derecha, cada letra vuela a su posición
+        nameTl.to(letters, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.9,
+          stagger: { each: 0.05, from: 'start' },
+          ease: 'power3.out',
+        });
+
+        // Fase 2: Onda de energía izquierda → derecha (se lanza antes de que termine la fase 1)
+        nameTl.to(letters, {
+          keyframes: [
+            { y: -14, scale: 1.1, duration: 0.15, ease: 'power2.out' },
+            { y: 0, scale: 1, duration: 0.45, ease: 'elastic.out(1, 0.4)' },
+          ],
+          stagger: { each: 0.04, from: 'start' },
+        }, '-=0.3');
+
+        // Idle: flotación orgánica continua por letra
+        nameTl.call(() => {
+          letters.forEach((letter, i) => {
+            gsap.to(letter, {
+              y: Math.sin(i * 0.7) * 4 + 2,
+              duration: 2.5 + (i % 3) * 0.4,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+              delay: i * 0.08,
+            });
+          });
+        });
 
         // Subtítulo - cada palabra con animación única
         gsap.to('.subtitle-word', {
@@ -125,7 +93,7 @@ export default function Hero() {
           duration: 1,
           stagger: 0.15,
           ease: 'back.out(1.7)',
-          delay: 1.2,
+          delay: 1.8,
         });
 
         // Texto descriptivo
@@ -133,31 +101,30 @@ export default function Hero() {
           opacity: 1,
           y: 0,
           duration: 1,
-          delay: 1.8,
+          delay: 2.4,
           ease: 'power3.out',
         });
 
-        // Tarjetas con efectos 3D
+        // Tarjetas — entrada suave desde abajo
         gsap.to('.info-card', {
           opacity: 1,
+          y: 0,
           scale: 1,
-          rotationY: 0,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: 'back.out(1.4)',
-          delay: 2,
+          duration: 1,
+          stagger: { each: 0.12, from: 'start' },
+          ease: 'power3.out',
+          delay: 2.6,
         });
 
-        // Animación continua de flotación más pronunciada
+        // Flotación orgánica continua
         gsap.to('.info-card', {
-          y: (index) => (index % 2 === 0 ? -15 : 15),
-          rotationZ: (index) => (index % 2 === 0 ? 2 : -2),
+          y: (index) => (index % 2 === 0 ? -12 : 12),
           duration: 3,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
-          stagger: 0.3,
-          delay: 3.5,
+          stagger: 0.4,
+          delay: 3.8,
         });
 
         // Stats numbers
@@ -167,18 +134,17 @@ export default function Hero() {
           duration: 0.8,
           stagger: 0.1,
           ease: 'back.out(2)',
-          delay: 1.5,
+          delay: 2.1,
         });
 
         // Tech stack icons
         gsap.to('.tech-icon', {
           opacity: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 1,
-          stagger: 0.05,
-          ease: 'elastic.out(1, 0.5)',
-          delay: 2.2,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.03,
+          ease: 'power2.out',
+          delay: 2.8,
         });
 
         // Botones CTA
@@ -189,7 +155,7 @@ export default function Hero() {
           duration: 1,
           stagger: 0.2,
           ease: 'back.out(1.7)',
-          delay: 2.8,
+          delay: 3.4,
         });
 
 
@@ -240,7 +206,7 @@ export default function Hero() {
   return (
     <div
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center"
     >
       {/* Contenido principal */}
       <div className="container mx-auto px-2 sm:px-4 py-20 relative z-10">

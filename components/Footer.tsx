@@ -62,7 +62,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer ref={footerRef} className="border-t border-gray-800 mt-20">
+    <footer ref={footerRef} className="border-t border-gray-800/50 mt-20 bg-black/60 backdrop-blur-xl">
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col items-center gap-8">
           {/* Logo y descripción */}

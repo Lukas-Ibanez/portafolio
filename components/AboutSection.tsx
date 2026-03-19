@@ -113,20 +113,6 @@ export default function AboutSection() {
 
   return (
     <section ref={sectionRef} className="relative py-20 overflow-hidden">
-      {/* Grid de fondo animado */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)',
-          backgroundSize: '50px 50px',
-        }}></div>
-      </div>
-
-      {/* Gradientes luminosos de fondo */}
-      <div className="absolute inset-0">
-        <div className="parallax-slow absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px]"></div>
-        <div className="parallax-medium absolute top-1/2 right-0 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px]"></div>
-        <div className="parallax-fast absolute bottom-0 left-1/3 w-[450px] h-[450px] bg-cyan-600/20 rounded-full blur-[100px]"></div>
-      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
