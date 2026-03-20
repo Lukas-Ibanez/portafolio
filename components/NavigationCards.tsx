@@ -1,19 +1,67 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from '@/lib/gsap-config';
 import Link from 'next/link';
 
+const sliderProjects = [
+  { title: 'SEDUC', url: 'https://seduc.cl/', tech: ['WordPress', 'PHP', 'CSS'], image: '/images/seduc.webp' },
+  { title: 'Cyclone Motos', url: 'https://cyclonemotos.cl/', tech: ['WordPress', 'WooCommerce', 'JS'], image: '/images/cyclone-motos.webp' },
+  { title: 'Herramientas Participativas', url: 'https://herramientasparticipativas.fundacionluksic.cl/', tech: ['WordPress', 'PHP', 'GSAP'], image: '/images/herramientas-participativas.webp' },
+  { title: 'Fundación Luksic', url: 'https://www.fundacionluksic.cl/', tech: ['WordPress', 'PHP', 'JS'], image: '/images/fundacionluksic.webp' },
+  { title: 'Agrosuper Proveedores', url: 'https://www.agrosuper.cl/proveedores/', tech: ['WordPress', 'PHP', 'REST API'], image: '/images/agrosuper-proveedores.webp' },
+];
+
 export default function NavigationCards() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startAutoplay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderProjects.length);
+    }, 4000);
+  }, []);
+
+  useEffect(() => {
+    startAutoplay();
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [startAutoplay]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    startAutoplay();
+  };
+
+  const goNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % sliderProjects.length);
+    startAutoplay();
+  };
+
+  const goPrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + sliderProjects.length) % sliderProjects.length);
+    startAutoplay();
+  };
+
+  const touchStartX = useRef(0);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) {
+      delta > 0 ? goNext() : goPrev();
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = sectionRef.current?.querySelectorAll('.nav-card');
-      
-      if (cards) {
-        gsap.set(cards, { opacity: 0, y: 80 });
-        gsap.to(cards, {
+      const sections = sectionRef.current?.querySelectorAll('.nav-card');
+
+      if (sections) {
+        gsap.set(sections, { opacity: 0, y: 80 });
+        gsap.to(sections, {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 70%',
@@ -23,6 +71,7 @@ export default function NavigationCards() {
           duration: 1,
           stagger: 0.3,
           ease: 'power3.out',
+          clearProps: 'transform',
         });
       }
     }, sectionRef);
@@ -32,133 +81,239 @@ export default function NavigationCards() {
 
   return (
     <section ref={sectionRef} className="relative py-20 overflow-hidden">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8 space-y-20 md:space-y-40">
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Card de Proyectos */}
-          <Link
-            href="/proyectos"
-            className="nav-card group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-blue-900/50 to-purple-900/50 border border-gray-800 hover:border-blue-500 transition-all duration-500"
-          >
-            {/* Glow effect */}
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
-
-            <div className="relative p-8 md:p-12 h-full min-h-[400px] flex flex-col justify-between">
-              {/* Icono */}
-              <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+        {/* ===== Projects Section ===== */}
+        <div className="nav-card flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+          {/* Left: Project Slider */}
+          <div className="w-full lg:w-[60%] relative group">
+            <div className="relative z-10 glass-panel p-4 rounded-xl nebula-glow">
+              <div
+                className="aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/8] overflow-hidden rounded-lg bg-black relative touch-pan-y"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                {/* Slides */}
+                {sliderProjects.map((project, index) => (
+                  <div
+                    key={index}
+                    className="absolute inset-0 transition-all duration-700 ease-in-out"
+                    style={{
+                      opacity: currentSlide === index ? 1 : 0,
+                      transform: currentSlide === index ? 'scale(1)' : 'scale(1.05)',
+                    }}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover object-center"
                     />
-                  </svg>
+                  </div>
+                ))}
+
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#070d1f]/90 via-[#070d1f]/20 to-transparent z-10" />
+
+                {/* Navigation arrows */}
+                <button
+                  onClick={goPrev}
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/40 backdrop-blur-sm border border-[#41475b]/30 flex items-center justify-center text-[#dfe4fe] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-black/60 transition-all duration-300"
+                >
+                  <span className="material-symbols-outlined text-base sm:text-lg">chevron_left</span>
+                </button>
+                <button
+                  onClick={goNext}
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/40 backdrop-blur-sm border border-[#41475b]/30 flex items-center justify-center text-[#dfe4fe] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-black/60 transition-all duration-300"
+                >
+                  <span className="material-symbols-outlined text-base sm:text-lg">chevron_right</span>
+                </button>
+
+                {/* Overlay Card with project info */}
+                <div className="absolute bottom-3 left-3 right-3 p-3 sm:bottom-6 sm:left-6 sm:right-6 sm:p-6 glass-panel rounded-lg sm:rounded-xl z-20">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 sm:gap-0">
+                    <div>
+                      <span className="text-[10px] sm:text-xs uppercase tracking-widest text-[#72dcff] font-bold mb-1 sm:mb-2 block">
+                        Proyecto {currentSlide + 1} de {sliderProjects.length}
+                      </span>
+                      <h3 className="text-lg sm:text-2xl font-headline font-extrabold text-[#dfe4fe] transition-all duration-300">
+                        {sliderProjects[currentSlide].title}
+                      </h3>
+                    </div>
+                    <div className="flex gap-1.5 sm:gap-2 flex-wrap sm:justify-end">
+                      {sliderProjects[currentSlide].tech.map((t) => (
+                        <span key={t} className="px-2 py-0.5 sm:px-3 sm:py-1 bg-[#1c253e] rounded-full text-[10px] sm:text-xs text-[#a5aac2]">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dots */}
+                <div className="absolute bottom-[70px] sm:bottom-[90px] left-1/2 -translate-x-1/2 z-20 hidden sm:flex gap-2">
+                  {sliderProjects.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        currentSlide === index
+                          ? 'w-8 bg-[#72dcff]'
+                          : 'w-3 bg-[#41475b]/50 hover:bg-[#41475b]'
+                      }`}
+                    />
+                  ))}
                 </div>
               </div>
-
-              {/* Contenido */}
-              <div className="flex-1">
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors duration-300">
-                  Mis Proyectos
-                </h3>
-                <p className="text-gray-400 text-lg mb-6 group-hover:text-gray-300 transition-colors duration-300">
-                  Explora los sitios y aplicaciones que he desarrollado. Desde e-commerce hasta
-                  dashboards interactivos.
-                </p>
-              </div>
-
-              {/* CTA */}
-              <div className="flex items-center text-blue-400 font-semibold group-hover:text-blue-300 transition-colors duration-300">
-                <span className="mr-2">Ver todos los proyectos</span>
-                <svg
-                  className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </div>
-
-              {/* Elementos decorativos */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 group-hover:bg-blue-500/20 transition-colors duration-500"></div>
             </div>
-          </Link>
+            {/* Back-layer depth */}
+            <div className="absolute top-8 left-8 w-full h-full bg-[#ac8aff]/5 rounded-xl -z-10 blur-sm" />
+            <div className="absolute -top-4 -right-4 w-32 h-32 bg-[#ec63ff]/10 rounded-full blur-3xl" />
+          </div>
 
-          {/* Card de Blog */}
-          <Link
-            href="/blog"
-            className="nav-card group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900/50 to-pink-900/50 border border-gray-800 hover:border-purple-500 transition-all duration-500"
-          >
-            {/* Glow effect */}
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-20 blur transition duration-500"></div>
-
-            <div className="relative p-8 md:p-12 h-full min-h-[400px] flex flex-col justify-between">
-              {/* Icono */}
-              <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
+          {/* Right: Content */}
+          <div className="w-full lg:w-[40%] space-y-8">
+            <div className="space-y-4">
+              <span className="text-[#ec63ff] text-sm font-bold tracking-[0.2em] uppercase">
+                Showcase
+              </span>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-headline font-black tracking-tighter leading-none text-[#dfe4fe]">
+                Mis{' '}
+                <span className="bg-gradient-to-r from-[#72dcff] to-[#ac8aff] bg-clip-text text-transparent">
+                  Proyectos
+                </span>
+              </h2>
+              <p className="text-[#a5aac2] text-lg leading-relaxed max-w-md">
+                Explorando la frontera del desarrollo frontend mediante la creación de interfaces dinámicas que responden al movimiento humano y datos en tiempo real.
+              </p>
+            </div>
+            <div className="flex flex-col gap-6">
+              <Link
+                href="/proyectos"
+                className="w-fit px-8 py-4 rounded-xl bg-gradient-to-r from-[#72dcff] to-[#ac8aff] text-[#004253] font-bold text-lg hover:scale-105 transition-transform nebula-glow flex items-center gap-3"
+              >
+                Ver todos los proyectos
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </Link>
+              <div className="flex items-center gap-4 py-4 border-t border-[#41475b]/15">
+                <div className="flex -space-x-3">
+                  <div className="w-10 h-10 rounded-full border-2 border-black bg-[#171f36] flex items-center justify-center">
+                    <span className="material-symbols-outlined text-sm text-[#72dcff]">terminal</span>
+                  </div>
+                  <div className="w-10 h-10 rounded-full border-2 border-black bg-[#171f36] flex items-center justify-center">
+                    <span className="material-symbols-outlined text-sm text-[#ac8aff]">layers</span>
+                  </div>
+                  <div className="w-10 h-10 rounded-full border-2 border-black bg-[#171f36] flex items-center justify-center">
+                    <span className="material-symbols-outlined text-sm text-[#ec63ff]">animation</span>
+                  </div>
                 </div>
+                <span className="text-sm text-[#6f758b]">+15 Experiencias Digitales</span>
               </div>
-
-              {/* Contenido */}
-              <div className="flex-1">
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 group-hover:text-purple-400 transition-colors duration-300">
-                  Blog
-                </h3>
-                <p className="text-gray-400 text-lg mb-6 group-hover:text-gray-300 transition-colors duration-300">
-                  Pensamientos sobre programación, desarrollo web y tecnología. Aprende y
-                  comparte conocimiento.
-                </p>
-              </div>
-
-              {/* CTA */}
-              <div className="flex items-center text-purple-400 font-semibold group-hover:text-purple-300 transition-colors duration-300">
-                <span className="mr-2">Leer artículos</span>
-                <svg
-                  className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </div>
-
-              {/* Elementos decorativos */}
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2 group-hover:bg-purple-500/20 transition-colors duration-500"></div>
             </div>
-          </Link>
+          </div>
         </div>
+
+        {/* ===== Blog Section ===== */}
+        <div className="nav-card bg-[#0c1326] rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 md:p-12 lg:p-20 relative overflow-hidden">
+          {/* Abstract background */}
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#ac8aff]/5 to-transparent" />
+
+          <div className="flex flex-col-reverse lg:flex-row gap-12 lg:gap-16 items-center relative z-10">
+            {/* Left: Content */}
+            <div className="w-full lg:w-[40%] space-y-8">
+              <div className="space-y-4">
+                <span className="text-[#72dcff] text-sm font-bold tracking-[0.2em] uppercase">
+                  Insights
+                </span>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-black tracking-tighter leading-tight text-[#dfe4fe]">
+                  Blog &amp;{' '}
+                  <span className="bg-gradient-to-r from-[#72dcff] to-[#ac8aff] bg-clip-text text-transparent">
+                    Pensamiento Técnico
+                  </span>
+                </h2>
+                <p className="text-[#a5aac2] text-lg leading-relaxed">
+                  Compartiendo conocimientos sobre arquitectura de sistemas, optimización de performance y el futuro de la web interactiva.
+                </p>
+              </div>
+              <div className="space-y-6">
+                <div className="group cursor-pointer">
+                  <span className="text-xs text-[#6f758b] uppercase tracking-widest">
+                    Post Destacado
+                  </span>
+                  <h4 className="text-xl font-headline font-bold text-[#dfe4fe] group-hover:text-[#72dcff] transition-colors">
+                    La era de los layouts asimétricos y el Micro-frontend
+                  </h4>
+                </div>
+                <Link
+                  href="/blog"
+                  className="inline-flex px-8 py-4 rounded-xl border border-[#72dcff]/30 bg-[#72dcff]/5 text-[#72dcff] font-bold text-lg hover:bg-[#72dcff]/10 transition-all items-center gap-3"
+                >
+                  Leer artículos
+                  <span className="material-symbols-outlined">menu_book</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Blog Visuals */}
+            <div className="w-full lg:w-[60%] grid grid-cols-2 gap-4 sm:gap-6">
+              {/* Column 1 */}
+              <div className="space-y-4 sm:space-y-6">
+                <div className="glass-panel p-2 rounded-2xl aspect-square overflow-hidden group">
+                  <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#11192e] via-[#1c253e] to-[#0c1326] relative overflow-hidden group-hover:scale-110 transition-transform duration-1000">
+                    <div className="absolute inset-0 opacity-20" style={{
+                      backgroundImage: 'radial-gradient(circle at 2px 2px, #72dcff 1px, transparent 0)',
+                      backgroundSize: '24px 24px',
+                    }} />
+                    <div className="absolute top-1/3 left-1/4 w-24 h-24 bg-[#72dcff]/10 rounded-full blur-2xl" />
+                    <div className="absolute bottom-1/3 right-1/4 w-20 h-20 bg-[#ac8aff]/10 rounded-full blur-2xl" />
+                  </div>
+                </div>
+                <div className="bg-[#1c253e] p-4 sm:p-6 rounded-2xl border border-[#41475b]/10">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#ec63ff]/20 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-[#ec63ff] text-xs sm:text-sm">code</span>
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs sm:text-sm text-[#a5aac2] truncate">¿Cómo centrar un div?</span>
+                      <p className="text-[8px] sm:text-[10px] text-[#6f758b] italic truncate" style={{ fontFamily: 'Arial, sans-serif' }}>
+                        Cerca de 336,000 resultados (0.25 s)
+                      </p>
+                    </div>
+                  </div>
+                  <div className="font-mono text-[9px] sm:text-[11px] leading-relaxed space-y-0.5">
+                    <p><span className="text-[#ec63ff]">div</span> <span className="text-[#41475b]">{'{'}</span></p>
+                    <p className="pl-4"><span className="text-[#72dcff]">display</span><span className="text-[#41475b]">:</span> <span className="text-[#ac8aff]">flex</span><span className="text-[#41475b]">;</span></p>
+                    <p className="pl-4"><span className="text-[#72dcff]">justify-content</span><span className="text-[#41475b]">:</span> <span className="text-[#ac8aff]">center</span><span className="text-[#41475b]">;</span></p>
+                    <p className="pl-4"><span className="text-[#72dcff]">align-items</span><span className="text-[#41475b]">:</span> <span className="text-[#ac8aff]">center</span><span className="text-[#41475b]">;</span></p>
+                    <p><span className="text-[#41475b]">{'}'}</span></p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Column 2 */}
+              <div className="pt-6 sm:pt-12 space-y-4 sm:space-y-6">
+                <div className="bg-[#1c253e] p-4 sm:p-6 rounded-2xl border border-[#41475b]/10">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#72dcff]/20 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-[#72dcff] text-xs sm:text-sm">speed</span>
+                    </div>
+                    <span className="text-xs sm:text-sm text-[#a5aac2]">Performance</span>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-headline font-black text-[#dfe4fe]">99.9</div>
+                  <span className="text-[10px] sm:text-xs text-[#6f758b] uppercase">Core Web Vitals</span>
+                </div>
+                <div className="glass-panel p-2 rounded-2xl aspect-square overflow-hidden group">
+                  <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#1c253e] via-[#11192e] to-[#0c1326] relative overflow-hidden group-hover:scale-110 transition-transform duration-1000">
+                    <div className="absolute inset-0 opacity-20" style={{
+                      backgroundImage: 'radial-gradient(circle at 2px 2px, #ac8aff 1px, transparent 0)',
+                      backgroundSize: '24px 24px',
+                    }} />
+                    <div className="absolute top-1/4 right-1/3 w-28 h-28 bg-[#ac8aff]/10 rounded-full blur-2xl" />
+                    <div className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-[#ec63ff]/10 rounded-full blur-2xl" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
