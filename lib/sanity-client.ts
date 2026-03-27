@@ -31,7 +31,7 @@ export async function getAllPosts(category?: 'programacion' | 'otros') {
     sources
   }`
 
-  return client.fetch(query)
+  return client.fetch(query, {}, { next: { revalidate: 60 } })
 }
 
 export async function getPostBySlug(slug: string) {
@@ -49,7 +49,7 @@ export async function getPostBySlug(slug: string) {
     sources
   }`
 
-  return client.fetch(query, { slug })
+  return client.fetch(query, { slug }, { next: { revalidate: 60 } })
 }
 
 export async function getPostSlugs() {
@@ -57,5 +57,5 @@ export async function getPostSlugs() {
     "slug": slug.current
   }`
 
-  return client.fetch(query)
+  return client.fetch(query, {}, { next: { revalidate: 60 } })
 }
