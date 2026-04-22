@@ -61,7 +61,9 @@ export default function Hero() {
 
           {/* Description */}
           <p className="hero-desc text-lg md:text-xl text-[#a5aac2] max-w-2xl mb-10 leading-relaxed">
-            Transformando ideas en experiencias digitales excepcionales con +2 años de pasión por el código. Arquitecto de interfaces dinámicas y sistemas robustos.
+            Desarrollador Full-Stack con experiencia en empresas como <a href="https://www.agrosuper.cl/" target="_blank" rel="noopener noreferrer">Agrosuper</a>, <a href="https://www.seduc.cl/" target="_blank" rel="noopener noreferrer">SEDUC</a> y <a href="https://www.fundacionluksic.cl/" target="_blank" rel="noopener noreferrer">Fundación Luksic</a>.<br></br>
+            Me encargo del proceso completo: servidor Linux, desarrollo, seguridad, SEO y optimización.<br></br>
+            Un solo responsable, desde el deploy hasta el usuario final.
           </p>
 
           {/* CTAs */}
@@ -87,11 +89,11 @@ export default function Hero() {
           {/* Metrics Bento */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
             <div className="hero-metric glass-panel p-6 rounded-2xl border border-[#41475b]/10 hover:border-[#72dcff]/30 transition-colors group">
-              <div className="text-3xl font-black text-[#72dcff] mb-1 font-headline">50+</div>
+              <div className="text-3xl font-black text-[#72dcff] mb-1 font-headline">15+</div>
               <div className="text-sm font-label uppercase tracking-wider text-[#a5aac2]">Proyectos Completados</div>
             </div>
             <div className="hero-metric glass-panel p-6 rounded-2xl border border-[#41475b]/10 hover:border-[#ac8aff]/30 transition-colors">
-              <div className="text-3xl font-black text-[#ac8aff] mb-1 font-headline">2+ Años</div>
+              <div className="text-3xl font-black text-[#ac8aff] mb-1 font-headline">3+ Años</div>
               <div className="text-sm font-label uppercase tracking-wider text-[#a5aac2]">Experiencia</div>
             </div>
             <div className="hero-metric glass-panel p-6 rounded-2xl border border-[#41475b]/10 hover:border-[#ec63ff]/30 transition-colors">
